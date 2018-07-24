@@ -36,7 +36,13 @@ const getToken = function(resource, apiver, callback) {
         }
     };
     rp(options)
-        .then(callback);
+        .then(function(data){
+            console.log(data);
+            callback
+        })
+        .catch(function(err){
+            console.log(err);
+        });
 }
 
 getToken("https://vault.azure.net", "2017-09-01", callMyMethod())
