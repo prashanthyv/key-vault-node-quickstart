@@ -27,7 +27,6 @@ var server = http.createServer(function(request, response) {
 //         throw (err);
 //     });
 
-
 const getToken = function(resource, apiver, callback) {
     var options = {
         uri: `${process.env["MSI_ENDPOINT"]}/?resource=${resource}&api-version=${apiver}`,
@@ -38,7 +37,7 @@ const getToken = function(resource, apiver, callback) {
     rp(options)
         .then(function(data){
             console.log(data);
-            callback(data);
+            return callback(data);
         })
         .catch(function(err){
             console.log(err);
