@@ -37,7 +37,7 @@ const getToken = function(resource, apiver, callback) {
     rp(options)
         .then(function(data){
             console.log(data);
-            return callback(data);
+            callback;
         })
         .catch(function(err){
             console.log(err);
