@@ -50,19 +50,23 @@ function callback(blah){
     console.log(blah);
 }
 
-function callMyMethod(){
-    getToken("https://vault.azure.net", "2017-09-01").then(function(data){
-        console.log("Hello World");
-        console.log(data);
-        console.log("Hello It Worked"); 
-    })
-}
+// function callMyMethod(){
+//     getToken("https://vault.azure.net", "2017-09-01").then(function(data){
+//         console.log("Hello World");
+//         console.log(data);
+//         console.log("Hello It Worked"); 
+//     })
+// }
 
-const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(certificateAuthenticator));
+const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(getToken));
 
-keyVaultClient.getSecret("https://nodeprashanthwebapp.vault.azure.net/","AppSecret")
+keyVaultClient.getSecret("https://prashanthnodevault.vault.azure.net/secrets/AppSecret","","")
     .then(function(data){
         console.log("Woohoo");
+    })
+    .catch(function(err){
+        console.log("Error while retrieving a secret value");
+        console.log(err);
     })
 //callMyMethod();
 
