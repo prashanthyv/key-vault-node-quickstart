@@ -12,7 +12,7 @@ var server = http.createServer(function(request, response) {
 //The url we want is `www.nodejitsu.com:1337/`
 var options = {
     host: 'localhost',
-    path: `${process.env["MSI_ENDPOINT"]}/?resource=${resource}&api-version=${apiver}`,
+    path: `${process.env["MSI_ENDPOINT"]}/?resource=${"https://vault.azure.net"}&api-version=${"2017-09-01"}`,
     //This is what changes the request to a POST request
     method: 'GET',
     headers: {
