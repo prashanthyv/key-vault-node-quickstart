@@ -25,14 +25,15 @@ var server = http.createServer(function(request, response) {
 //     }).catch(function (err) {
 //         throw (err);
 //     });
-
+/*
 var options = {
     uri: `${process.env["MSI_ENDPOINT"]}/?resource=${"https://vault.azure.net"}&api-version=${"2017-09-01"}`,
     headers: {
         'Secret': process.env["MSI_SECRET"]
     }
-};
+};*/
 
+/*
 const getToken = function(error, response, body) {
     if(error){
         console.log("Error occured", error);
@@ -45,9 +46,11 @@ const getToken = function(error, response, body) {
     }
 }
 
-request(options, getToken);
+request(options, getToken);*/
 
-const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(getToken));
+
+var creds = msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
+const keyVaultClient = new KeyVault.KeyVaultClient(creds);
 
 var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
 
