@@ -4,6 +4,7 @@ const AuthenticationContext = require('adal-node').AuthenticationContext;
 const rp = require('request-promise');
 var request = require('request');
 const KeyVault = require('azure-keyvault');
+const msRestAzure = require('ms-rest-azure');
 
 
 var server = http.createServer(function(request, response) {
