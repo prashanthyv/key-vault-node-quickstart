@@ -49,6 +49,8 @@ request(options, getToken);
 
 const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(getToken));
 
+var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
+
 // We're setting the Secret value here and retrieving the secret value
 keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
     .then( (kvSecretBundle, httpReq, httpResponse) => {
