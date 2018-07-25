@@ -37,6 +37,7 @@ const getToken = function(error, response, body) {
         console.log("Error occured", error);
     } else if(!error && response.statusCode === 200) {
         var parsedData = JSON.parse(body);
+        var authorizationValue = parsedData.tokenType + ' ' + parsedData.accessToken;
         console.log(parsedData);
     }
     // rp(options)
@@ -52,6 +53,24 @@ const getToken = function(error, response, body) {
 }
 
 request(options, getToken);
+
+
+const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(getToken));
+
+
+// We're setting the Secret value here and retrieving the secret value
+keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
+    .then( (kvSecretBundle, httpReq, httpResponse) => {
+        console.log("Secret id: '" + kvSecretBundle.id + "'.");
+        return keyVaultClient.getSecret(kvSecretBundle.id, {});
+    })
+    .then( (bundle) => {
+        console.log("Successfully retrieved 'test-secret'");
+        console.log(bundle);
+    })
+    .catch( (err) => {
+        console.log(err);
+    });
 
 // getToken("https://vault.azure.net", "2017-09-01", callback);
 
