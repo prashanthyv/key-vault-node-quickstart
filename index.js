@@ -50,24 +50,27 @@ const getToken = function(error, response, body) {
 request(options, getToken);*/
 
 
-var creds = msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
-const keyVaultClient = new KeyVault.KeyVaultClient(creds);
+msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'}).then( (credentials) => {
+    const keyVaultClient = new KeyVault.KeyVaultClient(new msRestAzure.KeyVaultCredentials(null, credentials));
 
-var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
+    var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
+    
+    // We're setting the Secret value here and retrieving the secret value
+    keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
+        .then( (kvSecretBundle, httpReq, httpResponse) => {
+            console.log("Secret id: '" + kvSecretBundle.id + "'.");
+            return keyVaultClient.getSecret(kvSecretBundle.id, {});
+        })
+        .then( (bundle) => {
+            console.log("Successfully retrieved 'test-secret'");
+            console.log(bundle);
+        })
+        .catch( (err) => {
+            console.log(err);
+        });
+});
 
-// We're setting the Secret value here and retrieving the secret value
-keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
-    .then( (kvSecretBundle, httpReq, httpResponse) => {
-        console.log("Secret id: '" + kvSecretBundle.id + "'.");
-        return keyVaultClient.getSecret(kvSecretBundle.id, {});
-    })
-    .then( (bundle) => {
-        console.log("Successfully retrieved 'test-secret'");
-        console.log(bundle);
-    })
-    .catch( (err) => {
-        console.log(err);
-    });
+
 
 // getToken("https://vault.azure.net", "2017-09-01", callback);
 
