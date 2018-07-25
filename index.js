@@ -9,32 +9,6 @@ var server = http.createServer(function(request, response) {
     response.end("Hello Prashanth!");
 });
 
-//The url we want is `www.nodejitsu.com:1337/`
-var options = {
-    host: 'localhost',
-    path: `${process.env["MSI_ENDPOINT"]}/?resource=${"https://vault.azure.net"}&api-version=${"2017-09-01"}`,
-    //This is what changes the request to a POST request
-    method: 'GET',
-    headers: {
-        'Secret': process.env["MSI_SECRET"]
-    }
-  };
-  
-
-  callback = function(response) {
-    var str = ''
-    response.on('data', function (chunk) {
-      str += chunk;
-    });
-  
-    response.on('end', function () {
-        console.log("Inside Data");
-        console.log(str);
-    });
-  }
-
-  var req = http.request(options, callback);
-
 // function getKeyVaultCredentials(){
 //     return msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
 // }
@@ -50,24 +24,33 @@ var options = {
 //         throw (err);
 //     });
 
-// const getToken = function(resource, apiver) {
-//     var options = {
-//         uri: `${process.env["MSI_ENDPOINT"]}/?resource=${resource}&api-version=${apiver}`,
-//         headers: {
-//             'Secret': process.env["MSI_SECRET"]
-//         }
-//     };
-//     rp(options)
-//         .then(function(tokenResponse){
-//             console.log(tokenResponse);    
-//             //return data;
-//             var authorizationValue = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
-//             return callback(authorizationValue);
-//         })
-//         .catch(function(err){
-//             console.log(err);
-//         });
-// }
+var options = {
+    uri: `${process.env["MSI_ENDPOINT"]}/?resource=${"https://vault.azure.net"}&api-version=${"2017-09-01"}`,
+    headers: {
+        'Secret': process.env["MSI_SECRET"]
+    }
+};
+
+const getToken = function(error, response, body) {
+    if(error){
+        console.log("Error occured", error);
+    } else if(!error && response.statusCode === 200) {
+        var parsedData = JSON.parse(body);
+        console.log(parsedData);
+    }
+    // rp(options)
+    //     .then(function(tokenResponse){
+    //         console.log(tokenResponse);    
+    //         //return data;
+    //         var authorizationValue = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
+    //         return callback(authorizationValue);
+    //     })
+    //     .catch(function(err) {
+    //         console.log(err);
+    //     });
+}
+
+request(options, getToken);
 
 // getToken("https://vault.azure.net", "2017-09-01", callback);
 
