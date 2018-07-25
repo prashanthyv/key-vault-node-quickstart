@@ -9,16 +9,13 @@ var server = http.createServer(function(request, response) {
     response.end("Hello Prashanth!");
 });
 
-
 // function getKeyVaultCredentials(){
 //     return msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
 // }
-
 // function getKeyVaultSecret(credentials) {
 //     let keyVaultClient = new KeyVault.KeyVaultClient(credentials);
 //     return keyVaultClient.getSecret(KEY_VAULT_URI, 'secret', "");
 // }
-
 // getKeyVaultCredentials().then(
 //         getKeyVaultSecret
 //     ).then(function (secret){
@@ -27,7 +24,7 @@ var server = http.createServer(function(request, response) {
 //         throw (err);
 //     });
 
-const getToken = function(resource, apiver, callback) {
+const getToken = function(resource, apiver) {
     var options = {
         uri: `${process.env["MSI_ENDPOINT"]}/?resource=${resource}&api-version=${apiver}`,
         headers: {
@@ -35,21 +32,39 @@ const getToken = function(resource, apiver, callback) {
         }
     };
     rp(options)
-        .then(function(data){
-            console.log(data);
-            callback;
+        .then(function(tokenResponse){
+            console.log(tokenResponse);    
+            //return data;
+            var authorizationValue = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
+            return callback(authorizationValue);
         })
         .catch(function(err){
             console.log(err);
         });
 }
 
-getToken("https://vault.azure.net", "2017-09-01", callMyMethod
+getToken("https://vault.azure.net", "2017-09-01", callback);
 
-function callMyMethod(data){
-    console.log(data);
-    console.log("Hello It Worked");
+function callback(blah){
+    console.log("Inside Blah");
+    console.log(blah);
 }
+
+function callMyMethod(){
+    getToken("https://vault.azure.net", "2017-09-01").then(function(data){
+        console.log("Hello World");
+        console.log(data);
+        console.log("Hello It Worked"); 
+    })
+}
+
+const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(certificateAuthenticator));
+
+keyVaultClient.getSecret("https://nodeprashanthwebapp.vault.azure.net/","AppSecret")
+    .then(function(data){
+        console.log("Woohoo");
+    })
+//callMyMethod();
 
 var port = process.env.PORT || 1337;
 server.listen(port);
