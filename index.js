@@ -1,5 +1,6 @@
 var http = require('http');
 var fs = require('fs');
+var request = require('request');
 const KeyVault = require('azure-keyvault');
 const AuthenticationContext = require('adal-node').AuthenticationContext;
 const rp = require('request-promise');
