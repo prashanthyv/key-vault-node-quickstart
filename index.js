@@ -1,9 +1,10 @@
 var http = require('http');
 var fs = require('fs');
-var request = require('request');
-const KeyVault = require('azure-keyvault');
 const AuthenticationContext = require('adal-node').AuthenticationContext;
 const rp = require('request-promise');
+var request = require('request');
+const KeyVault = require('azure-keyvault');
+
 
 var server = http.createServer(function(request, response) {
     response.writeHead(200, {"Content-Type": "text/plain"});
@@ -39,24 +40,14 @@ const getToken = function(error, response, body) {
         var parsedData = JSON.parse(body);
         var authorizationValue = parsedData.tokenType + ' ' + parsedData.accessToken;
         console.log(parsedData);
+        return authorizationValue;
+        
     }
-    // rp(options)
-    //     .then(function(tokenResponse){
-    //         console.log(tokenResponse);    
-    //         //return data;
-    //         var authorizationValue = tokenResponse.tokenType + ' ' + tokenResponse.accessToken;
-    //         return callback(authorizationValue);
-    //     })
-    //     .catch(function(err) {
-    //         console.log(err);
-    //     });
 }
 
 request(options, getToken);
 
-
 const keyVaultClient = new KeyVault.KeyVaultClient(new KeyVault.KeyVaultCredentials(getToken));
-
 
 // We're setting the Secret value here and retrieving the secret value
 keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
@@ -97,7 +88,7 @@ keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
 //         console.log("Error while retrieving a secret value");
 //         console.log(err);
 //     })
-//callMyMethod();
+//     callMyMethod();
 
 var port = process.env.PORT || 1337;
 server.listen(port);
