@@ -55,19 +55,22 @@ msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'}).then( 
 
     var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
     
+    keyVaultClient.getSecret(vaultUri, "AppSecret", "").then(function(response){
+        console.log(response);
+    })
     // We're setting the Secret value here and retrieving the secret value
-    keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
-        .then( (kvSecretBundle, httpReq, httpResponse) => {
-            console.log("Secret id: '" + kvSecretBundle.id + "'.");
-            return keyVaultClient.getSecret(kvSecretBundle.id, {});
-        })
-        .then( (bundle) => {
-            console.log("Successfully retrieved 'test-secret'");
-            console.log(bundle);
-        })
-        .catch( (err) => {
-            console.log(err);
-        });
+    // keyVaultClient.setSecret(vaultUri, 'my-secret', 'test-secret-value', {})
+    //     .then( (kvSecretBundle, httpReq, httpResponse) => {
+    //         console.log("Secret id: '" + kvSecretBundle.id + "'.");
+    //         return keyVaultClient.getSecret(kvSecretBundle.id, {});
+    //     })
+    //     .then( (bundle) => {
+    //         console.log("Successfully retrieved 'test-secret'");
+    //         console.log(bundle);
+    //     })
+    //     .catch( (err) => {
+    //         console.log(err);
+    //     });
 });
 
 
