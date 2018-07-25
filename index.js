@@ -51,7 +51,7 @@ request(options, getToken);*/
 
 
 msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'}).then( (credentials) => {
-    const keyVaultClient = new KeyVault.KeyVaultClient(new msRestAzure.KeyVaultCredentials(null, credentials));
+    const keyVaultClient = new KeyVault.KeyVaultClient(credentials);
 
     var vaultUri = "https://" + "PrashanthNodeVault" + ".vault.azure.net/";
     
