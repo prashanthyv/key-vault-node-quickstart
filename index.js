@@ -1,5 +1,4 @@
 var http = require('http');
-var request = require('request');
 const KeyVault = require('azure-keyvault');
 const msRestAzure = require('ms-rest-azure');
 

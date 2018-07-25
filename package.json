@@ -13,11 +13,6 @@
     },
     "dependencies": {
         "azure-keyvault": "^3.0.4",
-        "express": "^4.16.3",
-        "ms-rest-azure": "^2.5.7",
-        "npm": "^6.2.0",
-        "adal-node": "^0.1.28",
-        "request-promise": "^4.2.2",
-        "request": "2.87.0"
+        "ms-rest-azure": "^2.5.7"
     }
 }
