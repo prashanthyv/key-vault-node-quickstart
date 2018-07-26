@@ -32,7 +32,6 @@ msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'}).then( 
     //     });
 });
 
-
 var port = process.env.PORT || 1337;
 server.listen(port);
 
